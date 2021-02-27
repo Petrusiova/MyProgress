@@ -1,14 +1,16 @@
 package myProgress.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @ToString
+@NoArgsConstructor
+@Getter
+@Setter
 public abstract class AbstractNamedEntity extends AbstractBaseEntity {
 
-    @Getter
-    @Setter
     protected String name;
 
     protected AbstractNamedEntity(Integer id, String name) {

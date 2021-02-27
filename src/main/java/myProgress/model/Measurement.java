@@ -25,13 +25,13 @@ public class Measurement extends AbstractBaseEntity {
     private final Double shoulders;
     private final Double quad;
     private final Double bicep;
-    private final Double avgCalories;
-    private final Double trainingCount;
-    private final Double avgSteps;
+    private final Integer avgCalories;
+    private final Integer trainingCount;
+    private final Integer avgSteps;
 
     public Measurement(Integer id, LocalDate date, Double weight, Double waist,
                        Double hips, Double shoulders, Double quad, Double bicep,
-                       Double avgCalories, Double trainingCount, Double avgSteps) {
+                       Integer avgCalories, Integer trainingCount, Integer avgSteps) {
         super(id);
         this.date = date;
         this.weight = weight;
@@ -47,7 +47,7 @@ public class Measurement extends AbstractBaseEntity {
 
     public Measurement(Integer id, Double weight, Double waist,
                        Double hips, Double shoulders, Double quad, Double bicep,
-                       Double avgCalories, Double trainingCount, Double avgSteps) {
+                       Integer avgCalories, Integer trainingCount, Integer avgSteps) {
         super(id);
         this.weight = weight;
         this.waist = waist;
@@ -61,8 +61,8 @@ public class Measurement extends AbstractBaseEntity {
     }
 
     public Measurement(LocalDate date, Double weight, Double waist, Double hips,
-                       Double shoulders, Double quad, Double bicep, Double avgCalories,
-                       Double trainingCount, Double avgSteps) {
+                       Double shoulders, Double quad, Double bicep, Integer avgCalories,
+                       Integer trainingCount, Integer avgSteps) {
         this(null, date, weight, waist, hips, shoulders, quad, bicep, avgCalories, trainingCount, avgSteps);
     }
 

@@ -33,13 +33,4 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
                 .findFirst()
                 .orElse(null);
     }
-
-    public boolean checkAccessForUser(int currentUserId, int userProgressId){
-        User user = getCollection().stream()
-                .filter(item -> item.getId().equals(userProgressId))
-                .findFirst()
-                .orElse(null);
-
-        return user != null && user.getAccessUserIds().contains(currentUserId);
-    }
 }
