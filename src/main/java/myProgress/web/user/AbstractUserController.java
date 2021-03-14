@@ -1,6 +1,7 @@
 package myProgress.web.user;
 
 import myProgress.model.User;
+import myProgress.web.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,9 @@ public abstract class AbstractUserController {
     public User getByMail(String email) {
         log.info("getByEmail {}", email);
         return service.getByEmail(email);
+    }
+
+    public User getAccessToUser(int id){
+        return service.getAccessToUser(SecurityUtil.authUserId(), id);
     }
 }

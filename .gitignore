@@ -1,2 +1,9 @@
 # Project exclude paths
 /target/
+/.idea/
+.idea
+out
+target
+*.iml
+log
+*.patch

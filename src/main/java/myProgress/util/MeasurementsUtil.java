@@ -7,7 +7,6 @@ import myProgress.to.MeasurementTo;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,13 +21,7 @@ public class MeasurementsUtil {
     );
 
     public static List<MeasurementTo> getTos(Collection<Measurement> measurements) {
-//        return measurements == null ? List.of() : measurements
-//                .stream()
-//                .map(MeasurementsUtil::createTo)
-//                .collect(Collectors.toList());
-
         return
-//                measurements == null ? List.of() :
                 measurements
                 .stream()
                 .map(MeasurementsUtil::createTo)

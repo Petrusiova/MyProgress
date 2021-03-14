@@ -37,4 +37,8 @@ public class AdminRestController extends AbstractUserController {
     public User getByMail(String email) {
         return super.getByMail(email);
     }
+
+    public User getAccessToUser(int id){
+        return super.getAccessToUser(id);
+    }
 }

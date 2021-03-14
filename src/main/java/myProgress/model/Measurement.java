@@ -1,33 +1,67 @@
 package myProgress.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
-import org.springframework.lang.NonNull;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
+@Setter
 @ToString
+@Entity
+@NoArgsConstructor
+@Table(name = "measurements", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date"}, name = "measurements_unique_user_date_idx")})
 public class Measurement extends AbstractBaseEntity {
 
+    @Column(name = "date")
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date = LocalDate.now();
-    @NonNull
-    private final Double weight;
-    @NonNull
-    private final Double waist;
-    @NonNull
-    private final Double hips;
-    
+
+    @Column(name = "weight")
+    @NotNull
+    private Double weight;
+
+    @Column(name = "waist")
+    @NotNull
+    private Double waist;
+
+    @Column(name = "hips")
+    @NotNull
+    private Double hips;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
     /**
      * Nullable non-required measurements
      **/
-    private final Double shoulders;
-    private final Double quad;
-    private final Double bicep;
-    private final Integer avgCalories;
-    private final Integer trainingCount;
-    private final Integer avgSteps;
+    @Column(name = "shoulders")
+    private Double shoulders;
+
+    @Column(name = "quad")
+    private Double quad;
+
+    @Column(name = "bicep")
+    private Double bicep;
+
+    @Column(name = "avgCalories")
+    private Integer avgCalories;
+
+    @Column(name = "trainingCount")
+    private Integer trainingCount;
+
+    @Column(name = "avgSteps")
+    private Integer avgSteps;
 
     public Measurement(Integer id, LocalDate date, Double weight, Double waist,
                        Double hips, Double shoulders, Double quad, Double bicep,

@@ -3,7 +3,7 @@ package myProgress.web;
 
 public class SecurityUtil {
 
-    private static int id = 1;
+    private static int id = 100000;
 
     public static int authUserId() {
         return id;

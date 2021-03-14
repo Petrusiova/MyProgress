@@ -9,6 +9,7 @@ import myProgress.util.ValidationUtil;
 import myProgress.web.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 
@@ -20,6 +21,7 @@ import java.util.List;
 public class MeasurementRestController {
     private static final Logger log = LoggerFactory.getLogger(MeasurementRestController.class);
 
+    @Autowired
     private final MeasurementService service;
 
     public Measurement get(int id){
