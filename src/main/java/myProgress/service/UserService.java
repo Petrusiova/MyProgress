@@ -38,6 +38,14 @@ public class UserService {
         return crudUserRepository.findById(id).orElseThrow(() -> new NotFoundException("No user with id = " + id));
     }
 
+    public User getWithMeasurements(int id) {
+        return crudUserRepository.getWithMeasurements(id);
+    }
+
+    public User getWithAccessUserIds(int id) {
+        return crudUserRepository.getWithAccessAllowedIds(id);
+    }
+
     public User getByEmail(String email) {
         return checkNotFound(crudUserRepository.getByEmail(email), "email=" + email);
     }
@@ -50,8 +58,8 @@ public class UserService {
         checkNotFoundWithId(crudUserRepository.save(user), user.getId());
     }
 
-    public User getAccessToUser(int userId, int...accessUserId){
-        return crudUserRepository.getAccessToUser(
+    public User grantAccessToUser(int userId, int...accessUserId){
+        return crudUserRepository.grantAccessToUser(
                 crudUserRepository.getWithAccessAllowedIds(userId), accessUserId);
     }
 }

@@ -1,7 +1,6 @@
 package myProgress.repository;
 
 import myProgress.model.User;
-import myProgress.model.UserAccessRight;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -23,7 +22,11 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.id=?1")
     User getWithAccessAllowedIds(int id);
 
-    default User getAccessToUser(User user, int[] userAccessAllowedId){
+    @EntityGraph(attributePaths = {"measurements"}, type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT u FROM User u WHERE u.id=?1")
+    User getWithMeasurements(int id);
+
+    default User grantAccessToUser(User user, int[] userAccessAllowedId){
         return user.addAccessUserIds(user, userAccessAllowedId);
     }
 }

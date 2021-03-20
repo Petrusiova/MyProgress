@@ -1,6 +1,7 @@
 package myProgress.web.user;
 
 import myProgress.model.User;
+import myProgress.web.SecurityUtil;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -16,6 +17,14 @@ public class AdminRestController extends AbstractUserController {
     @Override
     public User get(int id) {
         return super.get(id);
+    }
+
+    public User getWithMeasurements() {
+        return super.getWithMeasurements(SecurityUtil.authUserId());
+    }
+
+    public User getWithAccessUserIds() {
+        return super.getWithAccessUserIds(SecurityUtil.authUserId());
     }
 
     @Override
@@ -38,7 +47,7 @@ public class AdminRestController extends AbstractUserController {
         return super.getByMail(email);
     }
 
-    public User getAccessToUser(int id){
-        return super.getAccessToUser(id);
+    public User grantAccessToUser(int id){
+        return super.grantAccessToUser(id);
     }
 }

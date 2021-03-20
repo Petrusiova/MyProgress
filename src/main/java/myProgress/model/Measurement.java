@@ -3,7 +3,6 @@ package myProgress.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,10 +13,11 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @NoArgsConstructor
-@Table(name = "measurements", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date"}, name = "measurements_unique_user_date_idx")})
+@Table(name = "measurements",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date"},
+                name = "measurements_unique_user_date_idx")})
 public class Measurement extends AbstractBaseEntity {
 
     @Column(name = "date")
@@ -63,7 +63,15 @@ public class Measurement extends AbstractBaseEntity {
     @Column(name = "avgSteps")
     private Integer avgSteps;
 
-    public Measurement(Integer id, LocalDate date, Double weight, Double waist,
+    public Measurement(Integer id, LocalDate date, Double weight, Double waist, Double hips) {
+        this(id, date, weight, waist, hips, null, null, null, null, null, null);
+    }
+
+    public Measurement(LocalDate date, Double weight, Double waist, Double hips) {
+        this(null, date, weight, waist, hips, null, null, null, null, null, null);
+    }
+
+    public Measurement(Integer id, LocalDate date,  Double weight, Double waist,
                        Double hips, Double shoulders, Double quad, Double bicep,
                        Integer avgCalories, Integer trainingCount, Integer avgSteps) {
         super(id);
@@ -77,31 +85,6 @@ public class Measurement extends AbstractBaseEntity {
         this.avgCalories = avgCalories;
         this.trainingCount = trainingCount;
         this.avgSteps = avgSteps;
-    }
-
-    public Measurement(Integer id, Double weight, Double waist,
-                       Double hips, Double shoulders, Double quad, Double bicep,
-                       Integer avgCalories, Integer trainingCount, Integer avgSteps) {
-        super(id);
-        this.weight = weight;
-        this.waist = waist;
-        this.hips = hips;
-        this.shoulders = shoulders;
-        this.quad = quad;
-        this.bicep = bicep;
-        this.avgCalories = avgCalories;
-        this.trainingCount = trainingCount;
-        this.avgSteps = avgSteps;
-    }
-
-    public Measurement(LocalDate date, Double weight, Double waist, Double hips,
-                       Double shoulders, Double quad, Double bicep, Integer avgCalories,
-                       Integer trainingCount, Integer avgSteps) {
-        this(null, date, weight, waist, hips, shoulders, quad, bicep, avgCalories, trainingCount, avgSteps);
-    }
-
-    public Measurement(LocalDate date, Double weight, Double waist, Double hips) {
-        this(null, date, weight, waist, hips, null, null, null, null, null, null);
     }
 }
 

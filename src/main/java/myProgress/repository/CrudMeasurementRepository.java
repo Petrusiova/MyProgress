@@ -1,6 +1,7 @@
 package myProgress.repository;
 
 import myProgress.model.Measurement;
+import myProgress.model.UserAccessRight;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,9 @@ public interface CrudMeasurementRepository extends JpaRepository<Measurement, In
     @Query("SELECT m from Measurement m WHERE m.id=:id and m.user.id=:user_id")
     Measurement get(@Param("id") int id, @Param("user_id") int userId);
 
+    @Query("SELECT m from Measurement m JOIN FETCH m.user WHERE m.id=:id and m.user.id=:user_id")
+    Measurement getWithUser(@Param("id") int id, @Param("user_id") int userId);
+
     @Query("SELECT m from Measurement m WHERE m.user.id=:user_id ORDER BY m.date desc")
     List<Measurement> getAll(@Param("user_id") int userId);
 
@@ -29,4 +33,7 @@ public interface CrudMeasurementRepository extends JpaRepository<Measurement, In
     List<Measurement> getBetween(@Param("user_id") int userId,
                                  @Param("start_date") LocalDate startDate,
                                  @Param("end_date") LocalDate endDate);
+
+    @Query("SELECT u from UserAccessRight u WHERE u.user.id=:access_right and u.accessRight=:user_id")
+    UserAccessRight getAccessAllowed(@Param("user_id") int userId, @Param("access_right") int userProgressId);
 }

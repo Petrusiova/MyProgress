@@ -29,6 +29,16 @@ public abstract class AbstractUserController {
         return service.get(id);
     }
 
+    public User getWithMeasurements(int id) {
+        log.info("get with measurements {}", id);
+        return service.getWithMeasurements(id);
+    }
+
+    public User getWithAccessUserIds(int id) {
+        log.info("get with access user ids {}", id);
+        return service.getWithAccessUserIds(id);
+    }
+
     public User create(User user) {
         log.info("create {}", user);
         checkNew(user);
@@ -51,7 +61,7 @@ public abstract class AbstractUserController {
         return service.getByEmail(email);
     }
 
-    public User getAccessToUser(int id){
-        return service.getAccessToUser(SecurityUtil.authUserId(), id);
+    public User grantAccessToUser(int id){
+        return service.grantAccessToUser(SecurityUtil.authUserId(), id);
     }
 }

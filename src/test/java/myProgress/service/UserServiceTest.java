@@ -1,32 +1,28 @@
 package myProgress.service;
 
+import myProgress.MeasurementTestData;
 import myProgress.UserTestData;
 import myProgress.model.Role;
 import myProgress.model.User;
+import myProgress.model.UserAccessRight;
 import myProgress.util.exception.NotFoundException;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import static myProgress.MeasurementTestData.M_MATCHER;
 import static myProgress.UserTestData.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
-})
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-public class UserServiceTest {
+public class UserServiceTest extends AbstractServiceTest{
 
     static {
         // Only for postgres driver logging
@@ -68,6 +64,22 @@ public class UserServiceTest {
     public void get() {
         User user = service.get(USER_ID);
         USER_MATCHER.assertMatch(user, UserTestData.user);
+    }
+
+    @Test
+    public void getWithMeasurements() {
+        User user = service.getWithMeasurements(USER_ID);
+        USER_MATCHER.assertMatch(user, UserTestData.user);
+        M_MATCHER.assertMatch(user.getMeasurements(), MeasurementTestData.userMeasurements);
+    }
+
+    @Test
+    public void getWithAccessUserIds() {
+        User admin = service.getWithAccessUserIds(USER_ID + 1);
+        USER_MATCHER.assertMatch(admin, UserTestData.admin);
+        assertEquals(
+                admin.getAccessUserIds().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toSet()),
+                Set.of(USER_ID, USER_ID + 1));
     }
 
     @Test

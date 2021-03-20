@@ -30,6 +30,12 @@ public class MeasurementRestController {
         return service.get(id, userId);
     }
 
+    public Measurement getWithUser(int id){
+        int userId = SecurityUtil.authUserId();
+        log.info("get personal measurement with user {} for user {}", id, userId);
+        return service.getWithUser(id, userId);
+    }
+
     public Measurement get(int id, int userProgressId){
         int userId = SecurityUtil.authUserId();
         log.info("user {} requests for measurement {} for user {}", userId, id, userProgressId);
