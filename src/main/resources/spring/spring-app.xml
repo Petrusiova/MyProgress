@@ -9,6 +9,8 @@
         <constructor-arg name="repository" ref="inmemoryUserRepository"/>
     </bean>
 -->
+    <import resource="spring-cache.xml"/>
+
     <context:component-scan base-package="myProgress.repository"/>
 
     <context:component-scan base-package="myProgress.service"/>

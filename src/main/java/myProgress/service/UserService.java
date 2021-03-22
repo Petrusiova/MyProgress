@@ -3,6 +3,8 @@ package myProgress.service;
 import myProgress.model.User;
 import myProgress.repository.CrudUserRepository;
 import myProgress.util.exception.NotFoundException;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -24,11 +26,13 @@ public class UserService {
         this.crudUserRepository = repository;
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
         return crudUserRepository.save(user);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     public boolean delete(int id) {
         checkNotFoundWithId(crudUserRepository.delete(id) != 0, id);
         return true;
@@ -50,14 +54,17 @@ public class UserService {
         return checkNotFound(crudUserRepository.getByEmail(email), "email=" + email);
     }
 
+    @Cacheable("users")
     public List<User> getAll() {
         return crudUserRepository.findAll(SORT_NAME_EMAIL);
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     public void update(User user) { // TODO: 09.03.2021 needs to be refactored (passwordEncoder, email to lower case)
         checkNotFoundWithId(crudUserRepository.save(user), user.getId());
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     public User grantAccessToUser(int userId, int...accessUserId){
         return crudUserRepository.grantAccessToUser(
                 crudUserRepository.getWithAccessAllowedIds(userId), accessUserId);

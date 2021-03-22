@@ -2,6 +2,8 @@ package myProgress.util;
 
 import myProgress.model.AbstractBaseEntity;
 import myProgress.util.exception.NotFoundException;
+import org.springframework.core.NestedExceptionUtils;
+import org.springframework.lang.NonNull;
 
 public class ValidationUtil {
 
@@ -40,7 +42,10 @@ public class ValidationUtil {
         }
     }
 
-    public static Boolean checkIdIncludedInFollowersList(){
-        return null;
+    //  https://stackoverflow.com/a/65442410/548473
+    @NonNull
+    public static Throwable getRootCause(@NonNull Throwable t) {
+        Throwable rootCause = NestedExceptionUtils.getRootCause(t);
+        return rootCause != null ? rootCause : t;
     }
 }
