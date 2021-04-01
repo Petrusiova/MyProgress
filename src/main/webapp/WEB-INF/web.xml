@@ -6,24 +6,40 @@
 
     <display-name>MyProgress</display-name>
 
-<!--    <servlet>-->
-<!--        <servlet-name>userServlet</servlet-name>-->
-<!--        <servlet-class>ru.javawebinar.topjava.web.UserServlet</servlet-class>-->
-<!--        <load-on-startup>0</load-on-startup>-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>userServlet</servlet-name>-->
-<!--        <url-pattern>/users</url-pattern>-->
-<!--    </servlet-mapping>-->
+    <context-param>
+        <param-name>spring.profiles.default</param-name>
+        <param-value>hsqldb,datajpa</param-value>
+    </context-param>
 
-<!--    <servlet>-->
-<!--        <servlet-name>mealServlet</servlet-name>-->
-<!--        <servlet-class>ru.javawebinar.topjava.web.MealServlet</servlet-class>-->
-<!--        <load-on-startup>0</load-on-startup>-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>mealServlet</servlet-name>-->
-<!--        <url-pattern>/meals</url-pattern>-->
-<!--    </servlet-mapping>-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:spring/spring-app.xml
+            classpath:spring/spring-db.xml
+        </param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>userServlet</servlet-name>
+        <servlet-class>myProgress.web.UserServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>userServlet</servlet-name>
+        <url-pattern>/users</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>measurementServlet</servlet-name>
+        <servlet-class>myProgress.web.MeasurementServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>measurementServlet</servlet-name>
+        <url-pattern>/measurements</url-pattern>
+    </servlet-mapping>
 
 </web-app>

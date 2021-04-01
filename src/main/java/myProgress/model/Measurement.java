@@ -14,11 +14,14 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@NoArgsConstructor
+//@NoArgsConstructor
 @Table(name = "measurements",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date"},
                 name = "measurements_unique_user_date_idx")})
 public class Measurement extends AbstractBaseEntity {
+
+    public Measurement() {
+    }
 
     @Column(name = "date")
     @NotNull
