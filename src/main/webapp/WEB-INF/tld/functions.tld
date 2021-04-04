@@ -6,6 +6,12 @@
 
     <tlib-version>1.0</tlib-version>
     <short-name>functions</short-name>
-    <uri>http://topjava.javawebinar.ru/functions</uri>
+    <uri>http://myProgress/functions</uri>
+
+    <function>
+        <name>formatDate</name>
+        <function-class>myProgress.util.DateUtil</function-class>
+        <function-signature>java.lang.String toString(java.time.LocalDate)</function-signature>
+    </function>
 
 </taglib>

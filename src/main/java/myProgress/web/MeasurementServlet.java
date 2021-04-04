@@ -42,31 +42,31 @@ public class MeasurementServlet extends HttpServlet {
         String trainingCount = request.getParameter("trainingCount");
         String avgSteps = request.getParameter("avgSteps");
         
-        if (StringUtils.isEmpty(shoulders)) {
+        if (!(shoulders.isEmpty() && shoulders.isBlank())) {
             measurement.setShoulders(Double.valueOf(shoulders));
         }
         
-        if (StringUtils.isEmpty(quad)) {
+        if (!(quad.isEmpty() && quad.isBlank())) {
             measurement.setQuad(Double.valueOf(quad));
         }
         
-        if (StringUtils.isEmpty(bicep)) {
+        if (!(bicep.isEmpty() && bicep.isBlank())) {
             measurement.setBicep(Double.valueOf(bicep));
         }
         
-        if (StringUtils.isEmpty(avgCalories)) {
+        if (!(avgCalories.isEmpty() && avgCalories.isBlank())) {
             measurement.setAvgCalories(Integer.valueOf(avgCalories));
         }
         
-        if (StringUtils.isEmpty(trainingCount)) {
+        if (!(trainingCount.isEmpty() && trainingCount.isBlank())) {
             measurement.setTrainingCount(Integer.valueOf(trainingCount));
         }
         
-        if (StringUtils.isEmpty(avgSteps)) {
+        if (!(avgSteps.isEmpty() && avgSteps.isBlank())) {
             measurement.setAvgSteps(Integer.valueOf(avgSteps));
         }
         
-        if (StringUtils.isEmpty(request.getParameter("id"))) {
+        if (request.getParameter("id").isEmpty() && request.getParameter("id").isBlank()) {
             mRestController.create(measurement);
         } else {
             mRestController.update(measurement, getId(request));

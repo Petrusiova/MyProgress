@@ -3,11 +3,14 @@ package myProgress.util;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
+
+
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 public class DateUtil {
-//    private static final DateFormatter DATE_TIME_FORMATTER = DateFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     // DB doesn't support LocalDate.MIN/MAX
     private static final LocalDate MIN_DATE = LocalDate.of(1, 1, 1);
@@ -21,9 +24,9 @@ public class DateUtil {
         return localDate != null ? localDate : MAX_DATE;
     }
 
-//    public static String toString(LocalDateTime ldt) {
-//        return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
-//    }
+    public static String toString(LocalDate ld) {
+        return ld == null ? "" : ld.format(DATE_TIME_FORMATTER);
+    }
 
     public static @Nullable
     LocalDate parseLocalDate(@Nullable String str) {

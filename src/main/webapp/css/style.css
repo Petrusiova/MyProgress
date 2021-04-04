@@ -15,13 +15,13 @@ dd {
     vertical-align: top;
 }
 
-tr[data-mealExcess="false"] {
-    color: green;
-}
+/*tr[data-mealExcess="false"] {*/
+/*    <fmt:message key="measurements.add"/>*/
+/*}*/
 
-tr[data-mealExcess="true"] {
-    color: red;
-}
+/*tr[data-mealExcess="true"] {*/
+/* <fmt:message key="measurements.update"/>*/
+/*}*/
 
 header, footer {
     background: none repeat scroll 0 0 #A6C9E2;
