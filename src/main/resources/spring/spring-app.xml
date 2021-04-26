@@ -9,6 +9,4 @@
 
     <context:component-scan base-package="myProgress.service"/>
 
-    <context:component-scan base-package="myProgress.web"/>
-
 </beans>

@@ -6,9 +6,9 @@
 <fmt:setBundle basename="messages.app"/>
 
 <html>
-<jsp:include page="fragments/headTag.jsp"/>
+<jsp:include page="../../fragments/headTag.jsp"/>
 <body>
-<jsp:include page="fragments/bodyHeader.jsp"/>
+<jsp:include page="../../fragments/bodyHeader.jsp"/>
 <section>
     <h3><a href="index.jsp">Home</a></h3>
     <hr/>

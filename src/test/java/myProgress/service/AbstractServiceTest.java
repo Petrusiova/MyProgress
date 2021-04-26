@@ -22,7 +22,7 @@ import static org.junit.Assert.assertThrows;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles({"hsqldb", "datajpa"})
-abstract public class AbstractServiceTest {
+public abstract class AbstractServiceTest {
     @ClassRule
     public static ExternalResource summary = TimingRules.SUMMARY;
 
@@ -30,7 +30,7 @@ abstract public class AbstractServiceTest {
     public Stopwatch stopwatch = TimingRules.STOPWATCH;
 
     //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
-    public <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
+    protected  <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
         assertThrows(rootExceptionClass, () -> {
             try {
                 runnable.run();
