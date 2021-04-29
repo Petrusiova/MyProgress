@@ -3,7 +3,7 @@ package myProgress;
 import myProgress.model.Role;
 import myProgress.model.User;
 import myProgress.to.MeasurementTo;
-import myProgress.web.measurement.MeasurementRestController;
+import myProgress.web.measurement.AbstractMeasurementController;
 import myProgress.web.user.AdminRestController;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -24,19 +24,19 @@ public class SpringMain {
 
             System.out.println();
 
-            MeasurementRestController measurementRestController = appCtx.getBean(MeasurementRestController.class);
+            AbstractMeasurementController abstractMeasurementController = appCtx.getBean(AbstractMeasurementController.class);
 
-            measurementRestController.getAll();
-            measurementRestController.getAll(user.getId());
+            abstractMeasurementController.getAll();
+            abstractMeasurementController.getAll(user.getId());
 
             List<MeasurementTo> list =
-                    measurementRestController.getBetween(
+                    abstractMeasurementController.getBetween(
                             LocalDate.now().minusDays(5),
                             LocalDate.now().minusDays(4));
             list.forEach(System.out::println);
-            measurementRestController.getAll(8);
+            abstractMeasurementController.getAll(8);
             System.out.println();
-            System.out.println(measurementRestController.getBetween(null, null));
+            System.out.println(abstractMeasurementController.getBetween(null, null));
         }
     }
 }

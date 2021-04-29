@@ -2,19 +2,15 @@ package myProgress.service;
 
 import myProgress.MeasurementTestData;
 import myProgress.model.Measurement;
-import myProgress.model.Role;
-import myProgress.model.User;
 import myProgress.util.exception.IllegalMeasurementAccessException;
 import myProgress.util.exception.NotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.ActiveProfiles;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
-import java.util.Date;
 
 import static myProgress.MeasurementTestData.*;
 import static myProgress.UserTestData.*;

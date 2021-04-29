@@ -52,7 +52,7 @@ public class User extends AbstractNamedEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private Set<UserAccessRight> accessUserIds;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")

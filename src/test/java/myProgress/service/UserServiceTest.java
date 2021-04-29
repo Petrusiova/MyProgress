@@ -5,13 +5,10 @@ import myProgress.UserTestData;
 import myProgress.model.Role;
 import myProgress.model.User;
 import myProgress.model.UserAccessRight;
-import myProgress.repository.JpaUtil;
 import myProgress.util.exception.NotFoundException;
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 
 import javax.validation.ConstraintViolationException;
@@ -35,17 +32,6 @@ public class UserServiceTest extends AbstractServiceTest{
 
     @Autowired
     private UserService service;
-
-    @Autowired
-    protected JpaUtil jpaUtil;
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Before
-    public void setup() {
-        cacheManager.getCache("users").clear();
-        jpaUtil.clear2ndLevelHibernateCache();
-    }
 
     @Test
     public void create() {
