@@ -2,7 +2,7 @@ package myProgress.web;
 
 import myProgress.MeasurementTestData;
 import myProgress.UserTestData;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static myProgress.MeasurementTestData.M_ID;
 import static myProgress.model.AbstractBaseEntity.START_SEQ;
@@ -11,10 +11,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class RootControllerTest extends AbstractControllerTest {
+class RootControllerTest extends AbstractControllerTest {
 
     @Test
-    public void getUsers() throws Exception {
+    void getUsers() throws Exception {
         perform(get("/users"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -30,7 +30,7 @@ public class RootControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void getMeasurements() throws Exception {
+    void getMeasurements() throws Exception {
         perform(get("/measurements"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -46,7 +46,7 @@ public class RootControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void getRoot() throws Exception {
+    void getRoot() throws Exception {
         perform(get("/"))
                 .andDo(print())
                 .andExpect(status().isOk())

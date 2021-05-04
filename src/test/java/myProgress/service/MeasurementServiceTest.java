@@ -4,8 +4,8 @@ import myProgress.MeasurementTestData;
 import myProgress.model.Measurement;
 import myProgress.util.exception.IllegalMeasurementAccessException;
 import myProgress.util.exception.NotFoundException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 
@@ -14,16 +14,16 @@ import java.time.LocalDate;
 
 import static myProgress.MeasurementTestData.*;
 import static myProgress.UserTestData.*;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class MeasurementServiceTest extends AbstractServiceTest {
+class MeasurementServiceTest extends AbstractServiceTest {
 
     @Autowired
     private MeasurementService service;
 
     @Test
-    public void create() throws Exception {
+    void create() throws Exception {
         Measurement newMeasurement = MeasurementTestData.getNew();
         Measurement created = service.create(newMeasurement, USER_ID);
 
@@ -35,57 +35,57 @@ public class MeasurementServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void createDuplicateUserAndDate() throws Exception {
+    void createDuplicateUserAndDate() throws Exception {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Measurement(LocalDate.of(2021, 3, 9), 1d, 1d, 1d), USER_ID));
     }
 
     @Test
-    public void get() {
+    void get() {
         Measurement actual = service.get(M_ID, USER_ID);
         M_MATCHER.assertMatch(actual, measurement1);
     }
 
     @Test
-    public void getWithUser() {
+    void getWithUser() {
         Measurement actual = service.getWithUser(M_ID, USER_ID);
         M_MATCHER.assertMatch(actual, measurement1);
         USER_MATCHER.assertMatch(actual.getUser(), user);
     }
 
     @Test
-    public void getAnotherUserProgress() {
+    void getAnotherUserProgress() {
         Measurement actual = service.get(M_ADMIN_ID, USER_ID, ADMIN_ID);
         M_MATCHER.assertMatch(actual, measurement4);
     }
 
     @Test
-    public void getNotFound() {
+    void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(0, USER_ID));
     }
 
     @Test
-    public void getNotOwn() {
+    void getNotOwn() {
         assertThrows(NotFoundException.class, () -> service.get(M_ID, ADMIN_ID));
     }
 
     @Test
-    public void getAll() {
+    void getAll() {
         M_MATCHER.assertMatch(service.getAll(USER_ID), userMeasurements);
     }
 
     @Test
-    public void getAllAnotherUserProgress() {
+    void getAllAnotherUserProgress() {
         M_MATCHER.assertMatch(service.getAll(USER_ID, ADMIN_ID), measurement4);
     }
 
     @Test
-    public void getAllNotAllowed() {
+    void getAllNotAllowed() {
         assertThrows(IllegalMeasurementAccessException.class, () -> service.getAll(M_ID, 0));
     }
 
     @Test
-    public void getBetween() {
+    void getBetween() {
         M_MATCHER.assertMatch(service.getBetween(
                 LocalDate.of(2021, 2, 22),
                 LocalDate.of(2021, 3, 1), USER_ID),
@@ -93,7 +93,7 @@ public class MeasurementServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getBetweenAnotherUserProgress() {
+    void getBetweenAnotherUserProgress() {
         M_MATCHER.assertMatch(service.getBetween(
                 LocalDate.of(2021, 2, 22),
                 LocalDate.of(2021, 3, 1), ADMIN_ID),
@@ -101,42 +101,42 @@ public class MeasurementServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void getBetweenWithNullDates() {
+    void getBetweenWithNullDates() {
         M_MATCHER.assertMatch(service.getBetween(null, null, USER_ID), userMeasurements);
     }
 
     @Test
-    public void update() {
+    void update() {
         Measurement updated = MeasurementTestData.getUpdated();
         service.update(updated, USER_ID);
         M_MATCHER.assertMatch(service.get(M_ID, USER_ID), MeasurementTestData.getUpdated());
     }
 
     @Test
-    public void updateNotOwn() {
+    void updateNotOwn() {
         NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(measurement1, ADMIN_ID));
-        Assert.assertEquals("Not found entity with id=" + M_ID, exception.getMessage());
+        Assertions.assertEquals("Not found entity with id=" + M_ID, exception.getMessage());
         M_MATCHER.assertMatch(service.get(M_ID, USER_ID), measurement1);
     }
 
     @Test
-    public void delete() {
+    void delete() {
         service.delete(M_ID, USER_ID);
         assertThrows(NotFoundException.class, () -> service.get(M_ID, USER_ID));
     }
 
     @Test
-    public void deleteNotFound() {
+    void deleteNotFound() {
         assertThrows(NotFoundException.class, () -> service.delete(0, USER_ID));
     }
 
     @Test
-    public void deleteNotOwn() {
+    void deleteNotOwn() {
         assertThrows(NotFoundException.class, () -> service.delete(M_ID, ADMIN_ID));
     }
 
     @Test
-    public void createWithException() throws Exception {
+    void createWithException() throws Exception {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new Measurement(null, LocalDate.now(), null, 58d, 86d), USER_ID));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new Measurement(null, null, 48d, 58d, 86d), USER_ID));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new Measurement(null, LocalDate.now(), 48.5, null, 86d), USER_ID));
