@@ -14,7 +14,7 @@ import static myProgress.web.SecurityUtil.authUserId;
 @RequestMapping(value = ProfileRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileRestController extends AbstractUserController {
 
-    static final String REST_URL = "/rest/profile";
+    public static final String REST_URL = "/rest/profile";
 
     @GetMapping
     public User get() {
@@ -38,12 +38,4 @@ public class ProfileRestController extends AbstractUserController {
     public User grantAccessToUser(@PathVariable int id){
         return super.grantAccessToUser(id);
     }
-//
-//    public User getWithMeasurements() {
-//        return super.getWithMeasurements(authUserId());
-//    }
-//
-//    public User getWithAccessUserIds() {
-//        return super.getWithAccessUserIds(authUserId());
-//    }
 }

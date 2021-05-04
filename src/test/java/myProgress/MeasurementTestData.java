@@ -15,7 +15,8 @@ import static myProgress.UserTestData.USER_ID;
 import static myProgress.model.AbstractBaseEntity.START_SEQ;
 
 public class MeasurementTestData {
-    public static final TestMatcher<Measurement> M_MATCHER = TestMatcher.usingIgnoringFieldsComparator("user");
+    public static final TestMatcher<Measurement> M_MATCHER =
+            TestMatcher.usingIgnoringFieldsComparator(Measurement.class, "user");
 
     public static final int M_ID = START_SEQ + 5;
     public static final int M_ADMIN_ID = M_ID + 3;

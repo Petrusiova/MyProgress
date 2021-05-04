@@ -17,31 +17,36 @@ import javax.validation.constraints.Size;
 import java.util.*;
 
 @Getter
-@Setter
+//@Setter
 @NoArgsConstructor
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User extends AbstractNamedEntity {
 
+    @Setter
     @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotBlank
     @Size(max = 100)
     private String email;
 
+    @Setter
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 100)
     private String password;
 
+    @Setter
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private boolean enabled = true;
 
+    @Setter
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     private Date registered = new Date();
 
+    @Setter
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
@@ -53,25 +58,25 @@ public class User extends AbstractNamedEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    @JsonIgnore
-    private Set<UserAccessRight> accessUserIds;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+//    @JsonIgnore
+    private Set<UserAccessRight> userAccessRights;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")
-    @JsonIgnore
+//    @JsonIgnore
     private List<Measurement> measurements;
 
     public User(User u) {
-        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRegistered(), u.getRoles(), u.getAccessUserIds());
+        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRegistered(), u.getRoles(), u.getUserAccessRights());
     }
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
         this(id, name, email, password, true, EnumSet.of(role, roles));
     }
 
-    public User(Integer id, String name, String email, String password, Set<UserAccessRight> accessUserIds, Role role, Role... roles) {
-        this(id, name, email, password, true, new Date(), EnumSet.of(role, roles), accessUserIds);
+    public User(Integer id, String name, String email, String password, Set<UserAccessRight> UserAccessRights, Role role, Role... roles) {
+        this(id, name, email, password, true, new Date(), EnumSet.of(role, roles), UserAccessRights);
     }
 
     public User(Integer id, String name, String email, String password, boolean enabled, Set<Role> roles) {
@@ -79,7 +84,7 @@ public class User extends AbstractNamedEntity {
     }
 
     public User(Integer id, String name, String email, String password, boolean enabled, Date registered,
-                 Collection<Role> roles, Set<UserAccessRight> accessUserIds) {
+                 Collection<Role> roles, Set<UserAccessRight> UserAccessRights) {
         super(id, name);
         this.email = email;
         this.password = password;
@@ -95,9 +100,9 @@ public class User extends AbstractNamedEntity {
 
     public User addAccessUserIds(User user, int[] accessUserIds) {
 //        if (user.getAccessUserIds() != null && user.getAccessUserIds().contains())
-        user.accessUserIds.addAll(Collections.singletonList(new UserAccessRight(this, this.getId())));
+        user.userAccessRights.addAll(Collections.singletonList(new UserAccessRight(this, this.getId())));
         Arrays.stream(accessUserIds).forEach(item ->
-                user.accessUserIds.addAll(Collections.singletonList(new UserAccessRight(this, item))));
+                user.userAccessRights.addAll(Collections.singletonList(new UserAccessRight(this, item))));
         return user;
     }
 
@@ -107,7 +112,6 @@ public class User extends AbstractNamedEntity {
                 "email='" + email + '\'' +
                 ", enabled=" + enabled +
                 ", roles=" + roles +
-                ", accessUserIds=" + accessUserIds +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 '}';

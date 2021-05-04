@@ -78,7 +78,7 @@ class UserServiceTest extends AbstractServiceTest{
         User admin = service.getWithAccessUserIds(USER_ID + 1);
         USER_MATCHER.assertMatch(admin, UserTestData.admin);
         assertEquals(
-                admin.getAccessUserIds().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toSet()),
+                admin.getUserAccessRights().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toSet()),
                 Set.of(USER_ID, USER_ID + 1));
     }
 
