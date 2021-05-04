@@ -2,34 +2,48 @@ package myProgress.web.user;
 
 import myProgress.model.User;
 import myProgress.web.SecurityUtil;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import static myProgress.web.SecurityUtil.authUserId;
 
 
-@Controller
+@RestController
+@RequestMapping(value = ProfileRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileRestController extends AbstractUserController {
 
+    static final String REST_URL = "/rest/profile";
+
+    @GetMapping
     public User get() {
-        return super.get(SecurityUtil.authUserId());
+        return super.get(authUserId());
     }
 
-
-    public User getWithMeasurements() {
-        return super.getWithMeasurements(SecurityUtil.authUserId());
-    }
-
-    public User getWithAccessUserIds() {
-        return super.getWithAccessUserIds(SecurityUtil.authUserId());
-    }
-
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete() {
-        super.delete(SecurityUtil.authUserId());
+        super.delete(authUserId());
     }
 
-    public void update(User user) {
-        super.update(user, SecurityUtil.authUserId());
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestBody User user) {
+        super.update(user, authUserId());
     }
 
-    public User grantAccessToUser(int id){
+    @PatchMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public User grantAccessToUser(@PathVariable int id){
         return super.grantAccessToUser(id);
     }
+//
+//    public User getWithMeasurements() {
+//        return super.getWithMeasurements(authUserId());
+//    }
+//
+//    public User getWithAccessUserIds() {
+//        return super.getWithAccessUserIds(authUserId());
+//    }
 }

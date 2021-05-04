@@ -1,5 +1,6 @@
 package myProgress.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
@@ -53,10 +54,12 @@ public class User extends AbstractNamedEntity {
     private Set<Role> roles;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonIgnore
     private Set<UserAccessRight> accessUserIds;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")
+    @JsonIgnore
     private List<Measurement> measurements;
 
     public User(User u) {

@@ -1,8 +1,12 @@
 package myProgress.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.util.Assert;
+
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
 import javax.persistence.*;
 
@@ -13,6 +17,7 @@ import javax.persistence.*;
 @ToString
 @MappedSuperclass
 @Access(AccessType.FIELD)
+@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, isGetterVisibility = NONE, setterVisibility = NONE)
 public abstract class AbstractBaseEntity {
     public static final int START_SEQ = 100000;
 
