@@ -32,9 +32,4 @@ public class DateUtil {
     LocalDate parseLocalDate(@Nullable String str) {
         return StringUtils.isEmpty(str) ? null : LocalDate.parse(str);
     }
-
-//    public static @Nullable
-//    LocalTime parseLocalTime(@Nullable String str) {
-//        return StringUtils.isEmpty(str) ? null : LocalTime.parse(str);
-//    }
 }

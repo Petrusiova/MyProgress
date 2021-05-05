@@ -1,13 +1,11 @@
 package myProgress.to;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -24,5 +22,4 @@ public class MeasurementTo {
     private Integer avgCalories;
     private Integer trainingCount;
     private Integer avgSteps;
-
 }
