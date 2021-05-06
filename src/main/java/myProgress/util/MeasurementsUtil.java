@@ -29,7 +29,7 @@ public class MeasurementsUtil {
 
     }
 
-    private static MeasurementTo createTo(Measurement measurement) {
+    public static MeasurementTo createTo(Measurement measurement) {
         return new MeasurementTo(
                 measurement.getId(), 
                 measurement.getDate(),

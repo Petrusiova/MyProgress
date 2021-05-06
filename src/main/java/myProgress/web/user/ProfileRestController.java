@@ -38,4 +38,14 @@ public class ProfileRestController extends AbstractUserController {
     public User grantAccessToUser(@PathVariable int id){
         return super.grantAccessToUser(id);
     }
+
+    @GetMapping("/with-measurements")
+    public User getWithMeasurements() {
+        return super.getWithMeasurements(authUserId());
+    }
+
+    @GetMapping("/with-accessUserIds")
+    public User getWithAccessUserIds() {
+        return super.getWithAccessUserIds(authUserId());
+    }
 }

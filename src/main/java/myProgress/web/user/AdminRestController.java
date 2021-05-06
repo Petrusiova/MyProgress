@@ -10,6 +10,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static myProgress.web.SecurityUtil.authUserId;
+
 @RestController
 @RequestMapping(value = AdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestController extends AbstractUserController {
@@ -58,9 +60,14 @@ public class AdminRestController extends AbstractUserController {
         return super.getByMail(email);
     }
 
-    @PatchMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public User grantAccessToUser(@PathVariable int id){
-        return super.grantAccessToUser(id);
+
+    @GetMapping("/{id}/with-measurements")
+    public User getWithMeasurements(@PathVariable int id) {
+        return super.getWithMeasurements(id);
+    }
+
+    @GetMapping("/{id}/with-accessUserIds")
+    public User getWithAccessUserIds(@PathVariable int id) {
+        return super.getWithAccessUserIds(id);
     }
 }

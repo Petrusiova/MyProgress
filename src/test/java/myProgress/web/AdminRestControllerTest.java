@@ -1,7 +1,9 @@
 package myProgress.web;
 
+import myProgress.MeasurementTestData;
 import myProgress.UserTestData;
 import myProgress.model.User;
+import myProgress.model.UserAccessRight;
 import myProgress.service.UserService;
 import myProgress.util.exception.NotFoundException;
 import myProgress.web.json.JsonUtil;
@@ -13,9 +15,13 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static myProgress.TestUtil.readFromJson;
 import static myProgress.UserTestData.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static myProgress.web.user.ProfileRestController.REST_URL;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -86,5 +92,29 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_MATCHER.contentJson(admin, user));
+    }
+
+    @Test
+    void getWithAccessUserIds() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + USER_ID + "/with-accessUserIds"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(user));
+
+        User user = readFromJson(action, User.class);
+
+        assertEquals(List.of(USER_ID), user.getUserAccessRights().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toList()));
+    }
+
+    @Test
+    void getWithMeasurements() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + USER_ID + "/with-measurements"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(user));
+
+        User user = readFromJson(action, User.class);
+
+        assertEquals(MeasurementTestData.userMeasurements, user.getMeasurements());
     }
 }

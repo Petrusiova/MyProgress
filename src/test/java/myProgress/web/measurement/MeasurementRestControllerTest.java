@@ -18,6 +18,7 @@ import static myProgress.MeasurementTestData.*;
 import static myProgress.TestUtil.readFromJson;
 import static myProgress.UserTestData.USER_ID;
 import static myProgress.UserTestData.admin;
+import static myProgress.util.MeasurementsUtil.createTo;
 import static myProgress.util.MeasurementsUtil.getTos;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -125,6 +126,6 @@ class MeasurementRestControllerTest extends AbstractControllerTest {
                 .param("startDate", "2021-02-22"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(M_TO_MATCHER.contentJson(getTos(List.of(measurement4))));
+                .andExpect(M_TO_MATCHER.contentJson(List.of(createTo(measurement4))));
     }
 }

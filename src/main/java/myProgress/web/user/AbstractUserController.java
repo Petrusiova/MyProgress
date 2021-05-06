@@ -51,6 +51,17 @@ public abstract class AbstractUserController {
         return service.getByEmail(email);
     }
 
+
+    public User getWithMeasurements(int id) {
+        log.info("getWithMeasurements {}", id);
+        return service.getWithMeasurements(id);
+    }
+
+    public User getWithAccessUserIds(int id) {
+        log.info("getWithAccessUserIds {}", id);
+        return service.getWithAccessUserIds(id);
+    }
+
     public User grantAccessToUser(int id){
         return service.grantAccessToUser(SecurityUtil.authUserId(), id);
     }

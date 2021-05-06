@@ -1,6 +1,7 @@
 package myProgress.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
@@ -17,36 +18,31 @@ import javax.validation.constraints.Size;
 import java.util.*;
 
 @Getter
-//@Setter
+@Setter
 @NoArgsConstructor
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 public class User extends AbstractNamedEntity {
 
-    @Setter
     @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotBlank
     @Size(max = 100)
     private String email;
 
-    @Setter
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 100)
     private String password;
 
-    @Setter
     @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
     private boolean enabled = true;
 
-    @Setter
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     private Date registered = new Date();
 
-    @Setter
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
@@ -58,12 +54,17 @@ public class User extends AbstractNamedEntity {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
+    /**
+     * List of users have access to that user's measurements
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonManagedReference
 //    @JsonIgnore
     private Set<UserAccessRight> userAccessRights;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")
+    @JsonManagedReference
 //    @JsonIgnore
     private List<Measurement> measurements;
 
