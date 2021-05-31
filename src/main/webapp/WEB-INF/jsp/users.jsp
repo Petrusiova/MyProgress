@@ -7,6 +7,10 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
+
+<script type="text/javascript" src="resources/js/myProgress.common.js" defer></script>
+<script type="text/javascript" src="resources/js/myProgress.users.js" defer></script>
+
 <div class="container-fluid">
     <div class="row">
         <jsp:include page="fragments/bodyHeader.jsp"/>
@@ -26,7 +30,11 @@
             </div>
             <section>
                 <h3><spring:message code="user.title"/></h3>
-                <table class="table table-striped table-sm">
+                <button class="btn btn-primary" onclick="add()">
+                    <span class="fa fa-plus"></span>
+                    <spring:message code="common.add"/>
+                </button>
+                <table class="table table-striped" id="datatable">
                     <thead>
                     <tr>
                         <th><spring:message code="user.name"/></th>
@@ -37,14 +45,15 @@
                     </tr>
                     </thead>
                     <c:forEach items="${users}" var="user">
-                        <jsp:useBean id="user" scope="page" type="myProgress.model.User"/>
+                        <jsp:useBean id="user" type="myProgress.model.User"/>
                         <tr>
                             <td><c:out value="${user.name}"/></td>
                             <td><a href="mailto:${user.email}">${user.email}</a></td>
                             <td>${user.roles}</td>
-                            <td><%=user.isEnabled()%>
-                            </td>
+                            <td><input type="checkbox" <c:if test="${user.enabled}">checked</c:if> id="${user.id}"/></td>
                             <td><fmt:formatDate value="${user.registered}" pattern="dd-MM-yyyy"/></td>
+                            <td><a><span class="fa fa-pencil"></span></a></td>
+                            <td><a class="delete" id="${user.id}"><span class="fa fa-remove"></span></a></td>
                         </tr>
                     </c:forEach>
                 </table>
@@ -52,5 +61,50 @@
         </main>
     </div>
 </div>
+
+<div class="modal fade" tabindex="-1" id="editRow">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><spring:message code="user.add"/></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="detailsForm">
+                    <input type="hidden" id="id" name="id">
+
+                    <div class="form-group">
+                        <label for="name" class="col-form-label"><spring:message code="user.name"/></label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               placeholder="<spring:message code="user.name"/>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="col-form-label"><spring:message code="user.email"/></label>
+                        <input type="email" class="form-control" id="email" name="email"
+                               placeholder="<spring:message code="user.email"/>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="col-form-label"><spring:message code="user.password"/></label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               placeholder="<spring:message code="user.password"/>">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <span class="fa fa-close"></span>
+                    <spring:message code="common.cancel"/>
+                </button>
+                <button type="button" class="btn btn-primary" onclick="save()">
+                    <span class="fa fa-check"></span>
+                    <spring:message code="common.save"/>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
