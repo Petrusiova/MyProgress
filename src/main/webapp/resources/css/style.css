@@ -23,6 +23,10 @@ tr {
     color: #484646;
 }
 
+.fa {
+    cursor: pointer;
+}
+
 /*dashboard*/
 
 header, footer {

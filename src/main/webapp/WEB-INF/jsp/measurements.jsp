@@ -37,8 +37,11 @@
                         <dt><spring:message code="measurements.endDate"/>:</dt>
                         <dd><input class="form-control" type="date" name="endDate" value="${param.endDate}"></dd>
                     </dl>
+                    <dl>
+                        <dt></dt>
+                        <dd><button class="btn btn-lg btn-primary btn-block" type="submit"><spring:message code="measurements.filter"/></button></dd>
+                    </dl>
 
-                    <button class="btn btn-lg btn-primary btn-block" type="submit"><spring:message code="measurements.filter"/></button>
                 </form>
                 <hr/>
                 <a href="measurements/create"><spring:message code="measurements.add"/></a>

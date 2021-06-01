@@ -8,8 +8,8 @@
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
 
-<script type="text/javascript" src="resources/js/myProgress.common.js" defer></script>
-<script type="text/javascript" src="resources/js/myProgress.users.js" defer></script>
+<script type="text/javascript" src="resources/js/common.js" defer></script>
+<script type="text/javascript" src="resources/js/users.js" defer></script>
 
 <div class="container-fluid">
     <div class="row">
@@ -34,6 +34,7 @@
                     <span class="fa fa-plus"></span>
                     <spring:message code="common.add"/>
                 </button>
+                <div class="table-responsive" data-color="#655f5f">
                 <table class="table table-striped" id="datatable">
                     <thead>
                     <tr>
@@ -42,6 +43,8 @@
                         <th><spring:message code="user.roles"/></th>
                         <th><spring:message code="user.active"/></th>
                         <th><spring:message code="user.registered"/></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <c:forEach items="${users}" var="user">
@@ -57,17 +60,18 @@
                         </tr>
                     </c:forEach>
                 </table>
+                </div>
             </section>
         </main>
     </div>
 </div>
-
+<%--всплывашка добавления юзера начало--%>
 <div class="modal fade" tabindex="-1" id="editRow">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title"><spring:message code="user.add"/></h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" data-dismiss="modal"  onclick="closeNoty()">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="detailsForm">
@@ -93,7 +97,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeNoty()">
                     <span class="fa fa-close"></span>
                     <spring:message code="common.cancel"/>
                 </button>
@@ -105,6 +109,6 @@
         </div>
     </div>
 </div>
-
+<%--всплывашка добавления юзера заканчивается--%>
 </body>
 </html>
