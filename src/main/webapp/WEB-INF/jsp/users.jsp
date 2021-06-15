@@ -8,8 +8,8 @@
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
 
-<script type="text/javascript" src="resources/js/common.js" defer></script>
-<script type="text/javascript" src="resources/js/users.js" defer></script>
+<script src="resources/js/common.js" defer></script>
+<script src="resources/js/users.js" defer></script>
 
 <div class="container-fluid">
     <div class="row">
@@ -56,7 +56,7 @@
                             <td><input type="checkbox" <c:if test="${user.enabled}">checked</c:if> id="${user.id}"/></td>
                             <td><fmt:formatDate value="${user.registered}" pattern="dd-MM-yyyy"/></td>
                             <td><a><span class="fa fa-pencil"></span></a></td>
-                            <td><a class="delete" id="${user.id}"><span class="fa fa-remove"></span></a></td>
+                            <td><a onclick="deleteRow(${user.id})"><span class="fa fa-remove"></span></a></td>
                         </tr>
                     </c:forEach>
                 </table>

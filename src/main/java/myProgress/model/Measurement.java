@@ -73,6 +73,12 @@ public class Measurement extends AbstractBaseEntity {
         this(null, date, weight, waist, hips, null, null, null, null, null, null);
     }
 
+    public Measurement(LocalDate date,  Double weight, Double waist,
+                       Double hips, Double shoulders, Double quad, Double bicep,
+                       Integer avgCalories, Integer trainingCount, Integer avgSteps) {
+        this(null, date, weight, waist, hips, shoulders, quad, bicep, avgCalories, trainingCount, avgSteps);
+    }
+
     public Measurement(Integer id, LocalDate date,  Double weight, Double waist,
                        Double hips, Double shoulders, Double quad, Double bicep,
                        Integer avgCalories, Integer trainingCount, Integer avgSteps) {
