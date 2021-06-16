@@ -2,6 +2,7 @@ package myProgress.web;
 
 import myProgress.MeasurementTestData;
 import myProgress.UserTestData;
+import myProgress.model.Following;
 import myProgress.model.User;
 import myProgress.model.UserAccessRight;
 import myProgress.service.UserService;
@@ -67,10 +68,19 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 (int) userService.getWithAccessUserIds(USER_ID).getUserAccessRights()
                         .stream()
                         .filter(item -> item.getAccessRight() == newUserId).count());
+
+        assertEquals(1,
+                (int) userService.getWithFollowings(newUserId).getFollowings()
+                        .stream()
+                        .filter(item -> item.getFollowing() == USER_ID).count());
     }
 
     @Test
     void getWithAccessUserIds() throws Exception {
+        perform(MockMvcRequestBuilders.patch(REST_URL + "/" +  ADMIN_ID))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
         ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "/with-accessUserIds"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -78,7 +88,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
         User user = readFromJson(action, User.class);
 
-         assertEquals(List.of(USER_ID), user.getUserAccessRights().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toList()));
+         assertEquals(List.of(ADMIN_ID), user.getUserAccessRights().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toList()));
     }
 
     @Test
@@ -91,5 +101,17 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         User user = readFromJson(action, User.class);
 
         assertEquals(MeasurementTestData.userMeasurements, user.getMeasurements());
+    }
+
+    @Test
+    void getWithFollowings() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "/with-followings"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(user));
+
+        User user = readFromJson(action, User.class);
+
+        assertEquals(List.of(ADMIN_ID), user.getFollowings().stream().map(Following::getFollowing).collect(Collectors.toList()));
     }
 }

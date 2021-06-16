@@ -22,7 +22,7 @@ public class MeasurementTestData {
     public static final TestMatcher<MeasurementTo> M_TO_MATCHER =
             TestMatcher.usingIgnoringFieldsComparator(MeasurementTo.class);
 
-    public static final int M_ID = START_SEQ + 5;
+    public static final int M_ID = START_SEQ + 4;
     public static final int M_ADMIN_ID = M_ID + 3;
 
     public static final Measurement measurement1 = new Measurement(M_ID, LocalDate.of(2021, 3, 9), 48.5, 58d, 86d);

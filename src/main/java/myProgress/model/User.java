@@ -1,6 +1,5 @@
 package myProgress.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -55,12 +54,20 @@ public class User extends AbstractNamedEntity {
     private Set<Role> roles;
 
     /**
-     * List of users have access to that user's measurements
+     * List of users who have an access to that user's measurements
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonManagedReference
 //    @JsonIgnore
     private Set<UserAccessRight> userAccessRights;
+
+    /**
+     * List of followings (another users' progress subscriptions)
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonManagedReference
+//    @JsonIgnore
+    private Set<Following> followings;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")
@@ -97,14 +104,6 @@ public class User extends AbstractNamedEntity {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
-    }
-
-    public User addAccessUserIds(User user, int[] accessUserIds) {
-//        if (user.getAccessUserIds() != null && user.getAccessUserIds().contains())
-        user.userAccessRights.addAll(Collections.singletonList(new UserAccessRight(this, this.getId())));
-        Arrays.stream(accessUserIds).forEach(item ->
-                user.userAccessRights.addAll(Collections.singletonList(new UserAccessRight(this, item))));
-        return user;
     }
 
     @Override

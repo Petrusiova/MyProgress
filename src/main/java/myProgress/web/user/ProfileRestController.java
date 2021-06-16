@@ -35,8 +35,8 @@ public class ProfileRestController extends AbstractUserController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public User grantAccessToUser(@PathVariable int id){
-        return super.grantAccessToUser(id);
+    public void grantAccessToUser(@PathVariable int id){
+        super.grantAccessToUser(id);
     }
 
     @GetMapping("/with-measurements")
@@ -47,5 +47,9 @@ public class ProfileRestController extends AbstractUserController {
     @GetMapping("/with-accessUserIds")
     public User getWithAccessUserIds() {
         return super.getWithAccessUserIds(authUserId());
+    }
+    @GetMapping("/with-followings")
+    public User getWithFollowings() {
+        return super.getWithFollowings(authUserId());
     }
 }

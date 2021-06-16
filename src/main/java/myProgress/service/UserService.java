@@ -1,6 +1,10 @@
 package myProgress.service;
 
+import myProgress.model.Following;
 import myProgress.model.User;
+import myProgress.model.UserAccessRight;
+import myProgress.repository.CrudFollowingRepository;
+import myProgress.repository.CrudUserAccessRightRepository;
 import myProgress.repository.CrudUserRepository;
 import myProgress.util.exception.NotFoundException;
 import org.springframework.cache.annotation.CacheEvict;
@@ -21,9 +25,15 @@ public class UserService {
     private static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
 
     private final CrudUserRepository crudUserRepository;
+    private final CrudUserAccessRightRepository accessRightRepository;
+    private final CrudFollowingRepository followingRepository;
 
-    public UserService(CrudUserRepository repository) {
+    public UserService(CrudUserRepository repository,
+                       CrudUserAccessRightRepository accessRightRepository,
+                       CrudFollowingRepository followingRepository) {
         this.crudUserRepository = repository;
+        this.accessRightRepository = accessRightRepository;
+        this.followingRepository = followingRepository;
     }
 
     @CacheEvict(value = "users", allEntries = true)
@@ -50,6 +60,10 @@ public class UserService {
         return crudUserRepository.getWithAccessAllowedIds(id);
     }
 
+    public User getWithFollowings(int id) {
+        return crudUserRepository.getWithFollowings(id);
+    }
+
     public User getByEmail(String email) {
         return checkNotFound(crudUserRepository.getByEmail(email), "email=" + email);
     }
@@ -64,9 +78,20 @@ public class UserService {
         checkNotFoundWithId(crudUserRepository.save(user), user.getId());
     }
 
+    
+    /**
+     * 1 - adding a subscription (to client's or friend's progress) to following user
+     * 2 - adding a follower/subscriber (with possibility to see) to following user
+     */
     @CacheEvict(value = "users", allEntries = true)
-    public User grantAccessToUser(int userId, int...accessUserId){
-        return crudUserRepository.grantAccessToUser(
-                crudUserRepository.getWithAccessAllowedIds(userId), accessUserId);
+    public void grantAccessToUser(int progressOwnerId, int subscriberId) {
+        User subscriber = crudUserRepository.getWithFollowings(subscriberId);
+        Following newFollowing = followingRepository.save(new Following(subscriber, progressOwnerId));
+        crudUserRepository.addFollowing(subscriber, newFollowing);
+
+        User progressOwner = crudUserRepository.getWithAccessAllowedIds(progressOwnerId);
+        UserAccessRight newUserAccessRight = accessRightRepository.save(new UserAccessRight(progressOwner, subscriberId));
+        crudUserRepository.grantAccessToUser(progressOwner, newUserAccessRight);
+
     }
 }

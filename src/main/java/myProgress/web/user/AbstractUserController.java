@@ -62,7 +62,12 @@ public abstract class AbstractUserController {
         return service.getWithAccessUserIds(id);
     }
 
-    public User grantAccessToUser(int id){
-        return service.grantAccessToUser(SecurityUtil.authUserId(), id);
+    public User getWithFollowings(int id) {
+        log.info("getWithFollowings {}", id);
+        return service.getWithFollowings(id);
+    }
+
+    public void grantAccessToUser(int id){
+        service.grantAccessToUser(SecurityUtil.authUserId(), id);
     }
 }
