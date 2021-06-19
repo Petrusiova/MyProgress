@@ -1,9 +1,7 @@
 package myProgress.service;
 
-import myProgress.model.Following;
 import myProgress.model.User;
 import myProgress.model.UserAccessRight;
-import myProgress.repository.CrudFollowingRepository;
 import myProgress.repository.CrudUserAccessRightRepository;
 import myProgress.repository.CrudUserRepository;
 import myProgress.util.exception.NotFoundException;
@@ -11,10 +9,12 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static myProgress.util.ValidationUtil.checkNotFound;
 import static myProgress.util.ValidationUtil.checkNotFoundWithId;
@@ -26,14 +26,11 @@ public class UserService {
 
     private final CrudUserRepository crudUserRepository;
     private final CrudUserAccessRightRepository accessRightRepository;
-    private final CrudFollowingRepository followingRepository;
 
     public UserService(CrudUserRepository repository,
-                       CrudUserAccessRightRepository accessRightRepository,
-                       CrudFollowingRepository followingRepository) {
+                       CrudUserAccessRightRepository accessRightRepository) {
         this.crudUserRepository = repository;
         this.accessRightRepository = accessRightRepository;
-        this.followingRepository = followingRepository;
     }
 
     @CacheEvict(value = "users", allEntries = true)
@@ -56,12 +53,12 @@ public class UserService {
         return crudUserRepository.getWithMeasurements(id);
     }
 
-    public User getWithAccessUserIds(int id) {
-        return crudUserRepository.getWithAccessAllowedIds(id);
+    public User getWithUserAccessRights(int id) {
+        return crudUserRepository.getWithUserAccessRights(id);
     }
 
-    public User getWithFollowings(int id) {
-        return crudUserRepository.getWithFollowings(id);
+    public List<Integer> getSubscriptions(int id) {
+        return accessRightRepository.getSubscriptions(id);
     }
 
     public User getByEmail(String email) {
@@ -78,20 +75,11 @@ public class UserService {
         checkNotFoundWithId(crudUserRepository.save(user), user.getId());
     }
 
-    
-    /**
-     * 1 - adding a subscription (to client's or friend's progress) to following user
-     * 2 - adding a follower/subscriber (with possibility to see) to following user
-     */
     @CacheEvict(value = "users", allEntries = true)
+    @Transactional
     public void grantAccessToUser(int progressOwnerId, int subscriberId) {
-        User subscriber = crudUserRepository.getWithFollowings(subscriberId);
-        Following newFollowing = followingRepository.save(new Following(subscriber, progressOwnerId));
-        crudUserRepository.addFollowing(subscriber, newFollowing);
-
-        User progressOwner = crudUserRepository.getWithAccessAllowedIds(progressOwnerId);
-        UserAccessRight newUserAccessRight = accessRightRepository.save(new UserAccessRight(progressOwner, subscriberId));
-        crudUserRepository.grantAccessToUser(progressOwner, newUserAccessRight);
-
+        UserAccessRight newUserAccessRight = new UserAccessRight(subscriberId);
+        newUserAccessRight.setUser(crudUserRepository.getOne(progressOwnerId));
+        accessRightRepository.saveAndFlush(newUserAccessRight);
     }
 }

@@ -1,11 +1,11 @@
-package myProgress.web;
+package myProgress.web.user;
 
 import myProgress.MeasurementTestData;
 import myProgress.UserTestData;
-import myProgress.model.Following;
 import myProgress.model.User;
 import myProgress.model.UserAccessRight;
 import myProgress.service.UserService;
+import myProgress.web.AbstractControllerTest;
 import myProgress.web.json.JsonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,19 +64,21 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
+        User withAccessUserIds = userService.getWithUserAccessRights(USER_ID);
+
         assertEquals(1,
-                (int) userService.getWithAccessUserIds(USER_ID).getUserAccessRights()
+                (int) withAccessUserIds.getUserAccessRights()
                         .stream()
                         .filter(item -> item.getAccessRight() == newUserId).count());
 
-        assertEquals(1,
-                (int) userService.getWithFollowings(newUserId).getFollowings()
-                        .stream()
-                        .filter(item -> item.getFollowing() == USER_ID).count());
+        List<Integer> subscriptions = userService.getSubscriptions(newUserId);
+
+        assertEquals(List.of(USER_ID), subscriptions);
     }
 
     @Test
     void getWithAccessUserIds() throws Exception {
+
         perform(MockMvcRequestBuilders.patch(REST_URL + "/" +  ADMIN_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
@@ -88,7 +90,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
         User user = readFromJson(action, User.class);
 
-         assertEquals(List.of(ADMIN_ID), user.getUserAccessRights().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toList()));
+         assertEquals(List.of(ADMIN_ID),
+                 user.getUserAccessRights().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toList()));
     }
 
     @Test
@@ -104,14 +107,14 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getWithFollowings() throws Exception {
+    void getSubscriptions() throws Exception {
         ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "/with-followings"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_MATCHER.contentJson(user));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 
-        User user = readFromJson(action, User.class);
+        Integer[] subscriptionIds = readFromJson(action, Integer[].class);
 
-        assertEquals(List.of(ADMIN_ID), user.getFollowings().stream().map(Following::getFollowing).collect(Collectors.toList()));
+        assertEquals(1, subscriptionIds.length);
+        assertEquals(ADMIN_ID, subscriptionIds[0]);
     }
 }

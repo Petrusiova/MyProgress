@@ -10,8 +10,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-import static myProgress.web.SecurityUtil.authUserId;
-
 @RestController
 @RequestMapping(value = AdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestController extends AbstractUserController {
@@ -38,7 +36,6 @@ public class AdminRestController extends AbstractUserController {
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
-
 
     @Override
     @DeleteMapping("/{id}")
@@ -67,7 +64,7 @@ public class AdminRestController extends AbstractUserController {
     }
 
     @GetMapping("/{id}/with-accessUserIds")
-    public User getWithAccessUserIds(@PathVariable int id) {
-        return super.getWithAccessUserIds(id);
+    public User getWithUserAccessRights(@PathVariable int id) {
+        return super.getWithUserAccessRights(id);
     }
 }

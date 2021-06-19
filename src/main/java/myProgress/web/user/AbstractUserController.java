@@ -57,17 +57,17 @@ public abstract class AbstractUserController {
         return service.getWithMeasurements(id);
     }
 
-    public User getWithAccessUserIds(int id) {
-        log.info("getWithAccessUserIds {}", id);
-        return service.getWithAccessUserIds(id);
-    }
-
-    public User getWithFollowings(int id) {
-        log.info("getWithFollowings {}", id);
-        return service.getWithFollowings(id);
+    public User getWithUserAccessRights(int id) {
+        log.info("getWithUserAccessRights {}", id);
+        return service.getWithUserAccessRights(id);
     }
 
     public void grantAccessToUser(int id){
         service.grantAccessToUser(SecurityUtil.authUserId(), id);
+    }
+
+    public List<Integer> getSubscriptions(int id) {
+        log.info("getWithFollowings {}", id);
+        return service.getSubscriptions(id);
     }
 }

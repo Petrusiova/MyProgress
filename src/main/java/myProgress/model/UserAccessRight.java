@@ -1,10 +1,7 @@
 package myProgress.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -12,19 +9,28 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "user_access_rights")
 public class UserAccessRight extends AbstractBaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private User user;
 
     @Column(name = "access_right")
     private int accessRight;
+
+    public UserAccessRight(int accessRight) {
+        this(null, accessRight);
+    }
+
+    public UserAccessRight(Integer id, int accessRight) {
+        super(id);
+        this.accessRight = accessRight;
+    }
 
     @Override
     public String toString() {

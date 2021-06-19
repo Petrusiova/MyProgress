@@ -1,15 +1,17 @@
 package myProgress.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
-import org.hibernate.annotations.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.*;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -56,43 +58,29 @@ public class User extends AbstractNamedEntity {
     /**
      * List of users who have an access to that user's measurements
      */
+    @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonManagedReference
-//    @JsonIgnore
-    private Set<UserAccessRight> userAccessRights;
-
-    /**
-     * List of followings (another users' progress subscriptions)
-     */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonManagedReference
-//    @JsonIgnore
-    private Set<Following> followings;
+    private List<UserAccessRight> userAccessRights;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")
     @JsonManagedReference
-//    @JsonIgnore
     private List<Measurement> measurements;
 
     public User(User u) {
-        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRegistered(), u.getRoles(), u.getUserAccessRights());
+        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRegistered(), u.getRoles());
     }
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
-        this(id, name, email, password, true, EnumSet.of(role, roles));
-    }
-
-    public User(Integer id, String name, String email, String password, Set<UserAccessRight> UserAccessRights, Role role, Role... roles) {
-        this(id, name, email, password, true, new Date(), EnumSet.of(role, roles), UserAccessRights);
+        this(id, name, email, password, true, new Date(), EnumSet.of(role, roles));
     }
 
     public User(Integer id, String name, String email, String password, boolean enabled, Set<Role> roles) {
-        this(id, name, email, password, enabled, new Date(), roles, Set.of());
+        this(id, name, email, password, enabled, new Date(), roles);
     }
 
-    public User(Integer id, String name, String email, String password, boolean enabled, Date registered,
-                 Collection<Role> roles, Set<UserAccessRight> UserAccessRights) {
+    public User(Integer id, String name, String email, String password, boolean enabled, Date registered, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;

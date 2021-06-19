@@ -1,11 +1,11 @@
 package myProgress.web.user;
 
 import myProgress.model.User;
-import myProgress.web.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static myProgress.web.SecurityUtil.authUserId;
 
@@ -46,10 +46,11 @@ public class ProfileRestController extends AbstractUserController {
 
     @GetMapping("/with-accessUserIds")
     public User getWithAccessUserIds() {
-        return super.getWithAccessUserIds(authUserId());
+        return super.getWithUserAccessRights(authUserId());
     }
+
     @GetMapping("/with-followings")
-    public User getWithFollowings() {
-        return super.getWithFollowings(authUserId());
+    public List<Integer> getSubscriptions() {
+        return super.getSubscriptions(authUserId());
     }
 }

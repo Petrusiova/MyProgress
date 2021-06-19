@@ -16,9 +16,6 @@ VALUES ('USER', 100000),
 INSERT INTO user_access_rights (user_id, access_right)
 VALUES (100001, 100000);
 
-INSERT INTO USER_FOLLOWINGS (user_id, following)
-VALUES (100000, 100001);
-
 INSERT INTO measurements (date, weight, waist, hips, user_id)
 VALUES ('2021-03-09', 48.5, 58, 86, 100000),
        ('2021-03-01', 48.1, 58, 86, 100000),

@@ -1,4 +1,4 @@
-package myProgress.web;
+package myProgress.web.user;
 
 import myProgress.MeasurementTestData;
 import myProgress.UserTestData;
@@ -6,6 +6,7 @@ import myProgress.model.User;
 import myProgress.model.UserAccessRight;
 import myProgress.service.UserService;
 import myProgress.util.exception.NotFoundException;
+import myProgress.web.AbstractControllerTest;
 import myProgress.web.json.JsonUtil;
 import myProgress.web.user.AdminRestController;
 import org.junit.jupiter.api.Test;
@@ -96,14 +97,15 @@ class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getWithAccessUserIds() throws Exception {
-        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + USER_ID + "/with-accessUserIds"))
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + ADMIN_ID + "/with-accessUserIds"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_MATCHER.contentJson(user));
+                .andExpect(USER_MATCHER.contentJson(admin));
 
         User user = readFromJson(action, User.class);
 
-        assertEquals(List.of(USER_ID), user.getUserAccessRights().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toList()));
+        assertEquals(List.of(USER_ID),
+                user.getUserAccessRights().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toList()));
     }
 
     @Test
