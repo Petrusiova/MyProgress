@@ -1,8 +1,6 @@
 package myProgress.repository;
 
 import myProgress.model.Measurement;
-import myProgress.model.UserAccessRight;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -34,7 +32,4 @@ public interface CrudMeasurementRepository extends JpaRepository<Measurement, In
     List<Measurement> getBetween(@Param("user_id") int userId,
                                  @Param("start_date") LocalDate startDate,
                                  @Param("end_date") LocalDate endDate);
-
-    @Query("SELECT u from UserAccessRight u WHERE u.user.id=:access_right and u.accessRight=:user_id")
-    UserAccessRight getAccessAllowed(@Param("user_id") int userId, @Param("access_right") int userProgressId);
 }

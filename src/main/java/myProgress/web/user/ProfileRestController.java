@@ -1,11 +1,10 @@
 package myProgress.web.user;
 
 import myProgress.model.User;
+import myProgress.web.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static myProgress.web.SecurityUtil.authUserId;
 
@@ -33,10 +32,12 @@ public class ProfileRestController extends AbstractUserController {
         super.update(user, authUserId());
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/grant_access/{subscriberId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void grantAccessToUser(@PathVariable int id){
-        super.grantAccessToUser(id);
+    public void grantAccessToUser(
+//            @AuthenticationPrincipal User currentUser,
+            @PathVariable int subscriberId){
+        super.grantAccessToUser(SecurityUtil.authUserId(), subscriberId);
     }
 
     @GetMapping("/with-measurements")
@@ -44,13 +45,13 @@ public class ProfileRestController extends AbstractUserController {
         return super.getWithMeasurements(authUserId());
     }
 
-    @GetMapping("/with-accessUserIds")
-    public User getWithAccessUserIds() {
-        return super.getWithUserAccessRights(authUserId());
+    @GetMapping("/with-subscribers")
+    public User getWithSubscribers() {
+        return super.getWithSubscribers(authUserId());
     }
 
-    @GetMapping("/with-followings")
-    public List<Integer> getSubscriptions() {
-        return super.getSubscriptions(authUserId());
+    @GetMapping("/with-subscriptions")
+    public User getWithSubscriptions() {
+        return super.getWithSubscriptions(authUserId());
     }
 }

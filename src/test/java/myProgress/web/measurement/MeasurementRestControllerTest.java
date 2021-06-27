@@ -35,7 +35,7 @@ class MeasurementRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getMyMeasurement() throws Exception {
-        perform(MockMvcRequestBuilders.get(PROFILE_URL + M_ID))
+        perform(MockMvcRequestBuilders.get(PROFILE_URL + M_USER_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
@@ -55,10 +55,10 @@ class MeasurementRestControllerTest extends AbstractControllerTest {
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(PROFILE_URL + M_ID))
+        perform(MockMvcRequestBuilders.delete(PROFILE_URL + M_USER_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> measurementService.get(M_ID, USER_ID));
+        assertThrows(NotFoundException.class, () -> measurementService.get(M_USER_ID, USER_ID));
     }
 
     @Test
@@ -80,12 +80,12 @@ class MeasurementRestControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Measurement updated = MeasurementTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(PROFILE_URL + M_ID)
+        perform(MockMvcRequestBuilders.put(PROFILE_URL + M_USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
 
-        M_MATCHER.assertMatch(measurementService.get(M_ID, USER_ID), updated);
+        M_MATCHER.assertMatch(measurementService.get(M_USER_ID, USER_ID), updated);
     }
 
     @Test

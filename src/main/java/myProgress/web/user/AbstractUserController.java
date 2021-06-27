@@ -1,7 +1,6 @@
 package myProgress.web.user;
 
 import myProgress.model.User;
-import myProgress.web.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,17 +56,17 @@ public abstract class AbstractUserController {
         return service.getWithMeasurements(id);
     }
 
-    public User getWithUserAccessRights(int id) {
-        log.info("getWithUserAccessRights {}", id);
-        return service.getWithUserAccessRights(id);
+    public User getWithSubscribers(int id) {
+        log.info("getWithSubscribers {}", id);
+        return service.getWithSubscribers(id);
     }
 
-    public void grantAccessToUser(int id){
-        service.grantAccessToUser(SecurityUtil.authUserId(), id);
+    public void grantAccessToUser(int currentUserId, int subscriberId){
+        service.grantAccessToUser(currentUserId, subscriberId);
     }
 
-    public List<Integer> getSubscriptions(int id) {
-        log.info("getWithFollowings {}", id);
-        return service.getSubscriptions(id);
+    public User getWithSubscriptions(int id) {
+        log.info("getWithSubscriptions {}", id);
+        return service.getWithSubscriptions(id);
     }
 }

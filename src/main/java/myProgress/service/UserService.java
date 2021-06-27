@@ -1,8 +1,6 @@
 package myProgress.service;
 
 import myProgress.model.User;
-import myProgress.model.UserAccessRight;
-import myProgress.repository.CrudUserAccessRightRepository;
 import myProgress.repository.CrudUserRepository;
 import myProgress.util.exception.NotFoundException;
 import org.springframework.cache.annotation.CacheEvict;
@@ -14,7 +12,6 @@ import org.springframework.util.Assert;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static myProgress.util.ValidationUtil.checkNotFound;
 import static myProgress.util.ValidationUtil.checkNotFoundWithId;
@@ -25,12 +22,9 @@ public class UserService {
     private static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
 
     private final CrudUserRepository crudUserRepository;
-    private final CrudUserAccessRightRepository accessRightRepository;
 
-    public UserService(CrudUserRepository repository,
-                       CrudUserAccessRightRepository accessRightRepository) {
+    public UserService(CrudUserRepository repository) {
         this.crudUserRepository = repository;
-        this.accessRightRepository = accessRightRepository;
     }
 
     @CacheEvict(value = "users", allEntries = true)
@@ -53,12 +47,12 @@ public class UserService {
         return crudUserRepository.getWithMeasurements(id);
     }
 
-    public User getWithUserAccessRights(int id) {
-        return crudUserRepository.getWithUserAccessRights(id);
+    public User getWithSubscribers(int id) {
+        return crudUserRepository.getWithSubscribers(id);
     }
 
-    public List<Integer> getSubscriptions(int id) {
-        return accessRightRepository.getSubscriptions(id);
+    public User getWithSubscriptions(int id) {
+        return crudUserRepository.getWithSubscriptions(id);
     }
 
     public User getByEmail(String email) {
@@ -77,9 +71,10 @@ public class UserService {
 
     @CacheEvict(value = "users", allEntries = true)
     @Transactional
-    public void grantAccessToUser(int progressOwnerId, int subscriberId) {
-        UserAccessRight newUserAccessRight = new UserAccessRight(subscriberId);
-        newUserAccessRight.setUser(crudUserRepository.getOne(progressOwnerId));
-        accessRightRepository.saveAndFlush(newUserAccessRight);
+    public void grantAccessToUser(int currentUserId, int subscriberId) {
+        User currentUser = crudUserRepository.getWithSubscribers(currentUserId);
+        User subscriber = crudUserRepository.getOne(subscriberId);
+        currentUser.getSubscribers().add(subscriber);
+        crudUserRepository.save(currentUser);
     }
 }

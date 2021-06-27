@@ -32,10 +32,10 @@ public class AbstractMeasurementController {
 //        return service.getWithUser(id, userId);
 //    }
 
-    public Measurement get(int id, int userProgressId){
+    public Measurement get(int measurementId, int userProgressId){
         int userId = SecurityUtil.authUserId();
-        log.info("user {} requests for measurement {} for user {}", userId, id, userProgressId);
-        return service.get(id, userId, userProgressId);
+        log.info("user {} requests for measurement {} for user {}", userId, measurementId, userProgressId);
+        return service.get(measurementId, userId, userProgressId);
     }
 
     public void delete(int id) {

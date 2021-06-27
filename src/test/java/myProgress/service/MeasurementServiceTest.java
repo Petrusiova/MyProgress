@@ -42,13 +42,13 @@ class MeasurementServiceTest extends AbstractServiceTest {
 
     @Test
     void get() {
-        Measurement actual = service.get(M_ID, USER_ID);
+        Measurement actual = service.get(M_USER_ID, USER_ID);
         M_MATCHER.assertMatch(actual, measurement1);
     }
 
     @Test
     void getWithUser() {
-        Measurement actual = service.getWithUser(M_ID, USER_ID);
+        Measurement actual = service.getWithUser(M_USER_ID, USER_ID);
         M_MATCHER.assertMatch(actual, measurement1);
         USER_MATCHER.assertMatch(actual.getUser(), user);
     }
@@ -66,7 +66,7 @@ class MeasurementServiceTest extends AbstractServiceTest {
 
     @Test
     void getNotOwn() {
-        assertThrows(NotFoundException.class, () -> service.get(M_ID, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.get(M_USER_ID, ADMIN_ID));
     }
 
     @Test
@@ -81,7 +81,7 @@ class MeasurementServiceTest extends AbstractServiceTest {
 
     @Test
     void getAllNotAllowed() {
-        assertThrows(IllegalMeasurementAccessException.class, () -> service.getAll(M_ID, 0));
+        assertThrows(IllegalMeasurementAccessException.class, () -> service.getAll(USER_ID, 0));
     }
 
     @Test
@@ -109,20 +109,20 @@ class MeasurementServiceTest extends AbstractServiceTest {
     void update() {
         Measurement updated = MeasurementTestData.getUpdated();
         service.update(updated, USER_ID);
-        M_MATCHER.assertMatch(service.get(M_ID, USER_ID), MeasurementTestData.getUpdated());
+        M_MATCHER.assertMatch(service.get(M_USER_ID, USER_ID), MeasurementTestData.getUpdated());
     }
 
     @Test
     void updateNotOwn() {
         NotFoundException exception = assertThrows(NotFoundException.class, () -> service.update(measurement1, ADMIN_ID));
-        Assertions.assertEquals("Not found entity with id=" + M_ID, exception.getMessage());
-        M_MATCHER.assertMatch(service.get(M_ID, USER_ID), measurement1);
+        Assertions.assertEquals("Not found entity with id=" + M_USER_ID, exception.getMessage());
+        M_MATCHER.assertMatch(service.get(M_USER_ID, USER_ID), measurement1);
     }
 
     @Test
     void delete() {
-        service.delete(M_ID, USER_ID);
-        assertThrows(NotFoundException.class, () -> service.get(M_ID, USER_ID));
+        service.delete(M_USER_ID, USER_ID);
+        assertThrows(NotFoundException.class, () -> service.get(M_USER_ID, USER_ID));
     }
 
     @Test
@@ -132,7 +132,7 @@ class MeasurementServiceTest extends AbstractServiceTest {
 
     @Test
     void deleteNotOwn() {
-        assertThrows(NotFoundException.class, () -> service.delete(M_ID, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(M_USER_ID, ADMIN_ID));
     }
 
     @Test

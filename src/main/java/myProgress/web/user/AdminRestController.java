@@ -63,8 +63,13 @@ public class AdminRestController extends AbstractUserController {
         return super.getWithMeasurements(id);
     }
 
-    @GetMapping("/{id}/with-accessUserIds")
-    public User getWithUserAccessRights(@PathVariable int id) {
-        return super.getWithUserAccessRights(id);
+    @GetMapping("/{id}/with-subscribers")
+    public User getWithSubscribers(@PathVariable int id) {
+        return super.getWithSubscribers(id);
+    }
+
+    @GetMapping("/{id}/with-subscriptions")
+    public User getWithSubscriptions(@PathVariable int id) {
+        return super.getWithSubscriptions(id);
     }
 }

@@ -1,16 +1,20 @@
 package myProgress.service;
 
 import myProgress.model.Measurement;
+import myProgress.model.User;
 import myProgress.repository.CrudMeasurementRepository;
 import myProgress.repository.CrudUserRepository;
 import myProgress.util.DateUtil;
 import myProgress.util.exception.IllegalMeasurementAccessException;
+import myProgress.util.exception.NotFoundException;
+import org.hibernate.validator.internal.constraintvalidators.bv.notempty.NotEmptyValidatorForArray;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static myProgress.util.ValidationUtil.checkNotFoundWithId;
 
@@ -18,11 +22,11 @@ import static myProgress.util.ValidationUtil.checkNotFoundWithId;
 public class MeasurementService {
 
     private final CrudMeasurementRepository mRepository;
-    private final CrudUserRepository uarRepository;
+    private final CrudUserRepository userRepository;
 
-    public MeasurementService(CrudMeasurementRepository repository, CrudUserRepository uarRepository) {
+    public MeasurementService(CrudMeasurementRepository repository, CrudUserRepository userRepository) {
         this.mRepository = repository;
-        this.uarRepository = uarRepository;
+        this.userRepository = userRepository;
     }
 
     public Measurement get(int id, int userId) {
@@ -68,7 +72,7 @@ public class MeasurementService {
 
     public Measurement create(Measurement measurement, int userId) {
         Assert.notNull(measurement, "measurement must not be null");
-        measurement.setUser(uarRepository.getOne(userId));
+        measurement.setUser(userRepository.getOne(userId));
         return mRepository.save(measurement);
     }
 
@@ -77,13 +81,21 @@ public class MeasurementService {
         if (!measurement.isNew() && get(measurement.getId(), userId) == null) {
             throw new IllegalMeasurementAccessException();
         }
-        measurement.setUser(uarRepository.getOne(userId));
+        measurement.setUser(userRepository.getOne(userId));
         checkNotFoundWithId(mRepository.save(measurement), measurement.getId());
     }
 
     private void checkAccessAllowed(int userId, int userProgressId) {
-        if (mRepository.getAccessAllowed(userId, userProgressId) == null) {
-            throw new IllegalMeasurementAccessException("Access denied");
+        Optional<User> subscriber = userRepository.findById(userId);
+        if (subscriber.isPresent()) {
+            Optional<User> byProgressId = userRepository.findById(userProgressId);
+            if (!(byProgressId.isPresent() &&
+                    userRepository.getWithSubscribers(userProgressId).getSubscribers().contains(subscriber.get()))) {
+                    throw new IllegalMeasurementAccessException("Access denied");
+            }
+        }
+        else {
+            throw new NotFoundException("No user found with id = " + userId);
         }
     }
 }

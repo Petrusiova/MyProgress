@@ -4,7 +4,6 @@ import myProgress.MeasurementTestData;
 import myProgress.UserTestData;
 import myProgress.model.Role;
 import myProgress.model.User;
-import myProgress.model.UserAccessRight;
 import myProgress.util.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -74,11 +73,17 @@ class UserServiceTest extends AbstractServiceTest{
     }
 
     @Test
-    void getWithAccessUserIds() {
-        User admin = service.getWithUserAccessRights(USER_ID + 1);
+    void getWithSubscribers() {
+        User admin = service.getWithSubscribers(USER_ID + 1);
         USER_MATCHER.assertMatch(admin, UserTestData.admin);
-        assertEquals(Set.of(USER_ID),
-                admin.getUserAccessRights().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toSet()));
+        assertEquals(Set.of(user), admin.getSubscribers());
+    }
+
+    @Test
+    void getWithSubscriptions() {
+        User user = service.getWithSubscriptions(USER_ID);
+        USER_MATCHER.assertMatch(user, UserTestData.user);
+        assertEquals(Set.of(admin), user.getSubscriptions());
     }
 
     @Test

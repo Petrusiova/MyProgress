@@ -3,12 +3,10 @@ package myProgress.web.user;
 import myProgress.MeasurementTestData;
 import myProgress.UserTestData;
 import myProgress.model.User;
-import myProgress.model.UserAccessRight;
 import myProgress.service.UserService;
 import myProgress.util.exception.NotFoundException;
 import myProgress.web.AbstractControllerTest;
 import myProgress.web.json.JsonUtil;
-import myProgress.web.user.AdminRestController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,11 +15,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static myProgress.TestUtil.readFromJson;
 import static myProgress.UserTestData.*;
-import static myProgress.web.user.ProfileRestController.REST_URL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -97,15 +95,14 @@ class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getWithAccessUserIds() throws Exception {
-        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + ADMIN_ID + "/with-accessUserIds"))
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + ADMIN_ID + "/with-subscribers"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_MATCHER.contentJson(admin));
 
-        User user = readFromJson(action, User.class);
+        User admin = readFromJson(action, User.class);
 
-        assertEquals(List.of(USER_ID),
-                user.getUserAccessRights().stream().map(UserAccessRight::getAccessRight).collect(Collectors.toList()));
+        assertEquals(Set.of(user), admin.getSubscribers());
     }
 
     @Test
@@ -118,5 +115,19 @@ class AdminRestControllerTest extends AbstractControllerTest {
         User user = readFromJson(action, User.class);
 
         assertEquals(MeasurementTestData.userMeasurements, user.getMeasurements());
+    }
+
+    @Test
+    void getWithSubscriptions() throws Exception {
+        userService.grantAccessToUser(USER_ID, ADMIN_ID);
+
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + USER_ID + "/with-subscriptions"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(user));
+
+        User subscriber = readFromJson(action, User.class);
+
+        assertEquals(Set.of(admin), subscriber.getSubscriptions());
     }
 }

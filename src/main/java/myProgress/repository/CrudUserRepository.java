@@ -1,16 +1,12 @@
 package myProgress.repository;
 
 import myProgress.model.User;
-import myProgress.model.UserAccessRight;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Transactional(readOnly = true)
@@ -22,9 +18,13 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
 
     User getByEmail(String email);
 
-    @EntityGraph(attributePaths = {"userAccessRights"}, type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = {"subscribers"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT u FROM User u WHERE u.id=?1")
-    User getWithUserAccessRights(int id);
+    User getWithSubscribers(int id);
+
+    @EntityGraph(attributePaths = {"subscriptions"}, type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT u FROM User u WHERE u.id=?1")
+    User getWithSubscriptions(int id);
 
     @EntityGraph(attributePaths = {"measurements"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT u FROM User u WHERE u.id=?1")

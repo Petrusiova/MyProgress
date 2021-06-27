@@ -1,11 +1,14 @@
 package myProgress.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
+import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.Entity;
@@ -16,6 +19,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.*;
 
 @Getter
@@ -52,16 +56,26 @@ public class User extends AbstractNamedEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @BatchSize(size = 200)
     @JoinColumn(name = "user_id") //https://stackoverflow.com/a/62848296/548473
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
-    /**
-     * List of users who have an access to that user's measurements
-     */
     @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonManagedReference
-    private List<UserAccessRight> userAccessRights;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_access_rights",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "follower_id")})
+    @Nullable
+//    @JsonManagedReference
+    private Set<User> subscribers = new HashSet<>();
+
+    @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_access_rights",
+            joinColumns = {@JoinColumn(name = "follower_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
+    @Nullable
+//    @JsonBackReference
+    private Set<User> subscriptions = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")

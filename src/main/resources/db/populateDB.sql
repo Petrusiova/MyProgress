@@ -13,7 +13,7 @@ VALUES ('USER', 100000),
        ('ADMIN', 100001),
        ('USER', 100001);
 
-INSERT INTO user_access_rights (user_id, access_right)
+INSERT INTO user_access_rights (user_id, follower_id)
 VALUES (100001, 100000);
 
 INSERT INTO measurements (date, weight, waist, hips, user_id)

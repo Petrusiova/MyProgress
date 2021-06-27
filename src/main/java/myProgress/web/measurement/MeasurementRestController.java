@@ -31,9 +31,9 @@ public class MeasurementRestController extends AbstractMeasurementController {
     }
 
     @Override
-    @GetMapping(USER_PROGRESS_URL + "/{id}")
-    public Measurement get(@PathVariable int userProgressId, @PathVariable int id) {
-        return super.get(id, userProgressId);
+    @GetMapping(USER_PROGRESS_URL + "/{measurementId}")
+    public Measurement get(@PathVariable int userProgressId, @PathVariable int measurementId) {
+        return super.get(measurementId, userProgressId);
     }
 
     @Override
