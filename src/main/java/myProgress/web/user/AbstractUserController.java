@@ -1,6 +1,8 @@
 package myProgress.web.user;
 
 import myProgress.model.User;
+import myProgress.to.UserTo;
+import myProgress.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,11 @@ public abstract class AbstractUserController {
         log.info("create {}", user);
         checkNew(user);
         return service.create(user);
+    }
+
+    public void create(UserTo userTo) {
+        log.info("create from to {}", userTo);
+        create(UserUtil.createNewFromTo(userTo));
     }
 
     public void delete(int id) {
