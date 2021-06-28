@@ -77,4 +77,12 @@ public class UserService {
         currentUser.getSubscribers().add(subscriber);
         crudUserRepository.save(currentUser);
     }
+
+    @CacheEvict(value = "users", allEntries = true)
+    @Transactional
+    public void enable(int id, boolean enabled) {
+        User user = get(id);
+        user.setEnabled(enabled);
+//        repository.save(user);  // !! need only for JDBC implementation
+    }
 }

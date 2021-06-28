@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 
 import static myProgress.MeasurementTestData.M_MATCHER;
 import static myProgress.UserTestData.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class UserServiceTest extends AbstractServiceTest{
@@ -115,5 +115,13 @@ class UserServiceTest extends AbstractServiceTest{
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "  ", "password", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)));
+    }
+
+    @Test
+    void enable() {
+        service.enable(USER_ID, false);
+        assertFalse(service.get(USER_ID).isEnabled());
+        service.enable(USER_ID, true);
+        assertTrue(service.get(USER_ID).isEnabled());
     }
 }

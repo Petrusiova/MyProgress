@@ -130,4 +130,16 @@ class AdminRestControllerTest extends AbstractControllerTest {
 
         assertEquals(Set.of(admin), subscriber.getSubscriptions());
     }
+
+
+    @Test
+    void enable() throws Exception {
+        perform(MockMvcRequestBuilders.patch(REST_URL + USER_ID)
+                .param("enabled", "false")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        assertFalse(userService.get(USER_ID).isEnabled());
+    }
 }
