@@ -48,7 +48,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="measurements">
+                <a class="nav-link" href="subscriptions">
                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
                          stroke-linecap="round" stroke-linejoin="round" class="feather css-i6dzq1">
                         <circle cx="11" cy="11" r="8"></circle>

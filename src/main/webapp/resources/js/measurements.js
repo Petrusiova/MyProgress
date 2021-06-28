@@ -12,6 +12,13 @@ const measurementsAjaxUrl = "measurements/";
 //     }
 // }
 
+function clearFilter() {
+    $("#filter")[0].reset();
+    // $.get("measurements/", updateTableByData);
+    updateFilteredTable();
+}
+
+
 function updateFilteredTable() {
     $.ajax({
         type: "GET",

@@ -32,7 +32,7 @@
 
                 <h3><spring:message code="measurements.title"/></h3>
                 <div class="card border-left">
-                    <div class="card-body">
+                    <div class="card-body pb-0">
                         <form id="filter">
                             <%--                            <div class="row">--%>
                             <div class="col-2">
@@ -47,7 +47,7 @@
                         </form>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-danger">
+                        <button class="btn btn-danger" onclick="clearFilter()">
                             <span class="fa fa-remove"></span>
                             <spring:message code="common.cancel"/>
                         </button>
